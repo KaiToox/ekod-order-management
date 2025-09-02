@@ -7,9 +7,14 @@ import fr.ekod.exceptions.OutOfStockException;
 
 public class ShoppingCart {
     private List<Product> products;
+    private Order associatedOrder;
 
     public ShoppingCart() {
         this.products = new ArrayList<>();
+    }
+
+    public void setAssociatedOrder(Order order) {
+        this.associatedOrder = order;
     }
 
     public void addProduct(Product product) throws OutOfStockException {
@@ -18,11 +23,19 @@ public class ShoppingCart {
         }
         products.add(product);
         product.decreaseStock();
+        notifyOrderUpdate();
     }
 
     public void removeProduct(Product product) {
         if (products.remove(product)) {
             product.increaseStock();
+            notifyOrderUpdate();
+        }
+    }
+
+    private void notifyOrderUpdate() {
+        if (associatedOrder != null) {
+            associatedOrder.updateFromCart();
         }
     }
 

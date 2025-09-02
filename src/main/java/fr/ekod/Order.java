@@ -12,6 +12,12 @@ public class Order {
         this.shoppingCart = shoppingCart;
         this.discount = 0.0;
         this.deliveryFee = deliveryFee;
+        // Établir la liaison bidirectionnelle
+        shoppingCart.setAssociatedOrder(this);
+        updateFromCart();
+    }
+
+    public void updateFromCart() {
         calculateTotal();
     }
 
