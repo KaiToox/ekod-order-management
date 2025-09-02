@@ -7,34 +7,37 @@ public class Order {
     private double totalPrice;
     private double discount;
     private double deliveryFee;
-    private static final double BASE_DELIVERY_FEE = 5.0;
 
-    public Order(ShoppingCart shoppingCart) {
+    public Order(ShoppingCart shoppingCart, double deliveryFee) {
         this.shoppingCart = shoppingCart;
         this.discount = 0.0;
-        this.deliveryFee = BASE_DELIVERY_FEE * shoppingCart.getItemCount();
+        this.deliveryFee = deliveryFee;
         calculateTotal();
     }
 
     public void calculateTotal() {
         double subtotal = shoppingCart.getTotalPrice();
-        totalPrice = subtotal + deliveryFee;
         if (discount > 0) {
-            totalPrice = (totalPrice + deliveryFee) * (1 - discount);
+            // Appliquer la remise sur le sous-total seulement
+            totalPrice = (subtotal * (1 - discount / 100.0)) + deliveryFee;
+        } else {
+            totalPrice = subtotal + deliveryFee;
         }
     }
 
-    public void applyDiscount(String discountCode) throws InvalidDiscountCodeException {
-        switch (discountCode) {
-            case "PROMO10":
-                this.discount = 0.15;
-                break;
-            case "PROMO20":
-                this.discount = 0.20;
-                break;
-            default:
-                throw new InvalidDiscountCodeException("Code de réduction invalide: " + discountCode);
+    public void setDiscount(double discount) {
+        if (discount < 0 || discount > 100) {
+            throw new IllegalArgumentException("La remise doit être entre 0 et 100%");
         }
+        this.discount = discount;
+        calculateTotal();
+    }
+
+    public void setDeliveryFee(double deliveryFee) {
+        if (deliveryFee < 0) {
+            throw new IllegalArgumentException("Les frais de livraison ne peuvent pas être négatifs");
+        }
+        this.deliveryFee = deliveryFee;
         calculateTotal();
     }
 

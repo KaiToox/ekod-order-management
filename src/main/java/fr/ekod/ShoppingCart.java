@@ -13,16 +13,16 @@ public class ShoppingCart {
     }
 
     public void addProduct(Product product) throws OutOfStockException {
-        if (product.getStockQuantity() <= 0) {
+        if (product.getStock() <= 0) {
             throw new OutOfStockException("Le produit " + product.getName() + " est en rupture de stock");
         }
         products.add(product);
-        product.decrementStock();
+        product.decreaseStock();
     }
 
     public void removeProduct(Product product) {
         if (products.remove(product)) {
-            product.incrementStock();
+            product.increaseStock();
         }
     }
 
@@ -36,7 +36,7 @@ public class ShoppingCart {
         return new ArrayList<>(products);
     }
 
-    public int getItemCount() {
+    public int getNumberOfItems() {
         return products.size();
     }
 }

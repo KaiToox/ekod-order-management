@@ -1,6 +1,5 @@
 package fr.ekod;
 
-import fr.ekod.exceptions.InvalidDiscountCodeException;
 import fr.ekod.exceptions.OutOfStockException;
 
 public class Main {
@@ -26,15 +25,15 @@ public class Main {
                 System.out.println("Erreur: " + e.getMessage());
             }
 
-            // Créer la commande
-            Order order = new Order(cart);
+            // Créer la commande avec frais de livraison
+            Order order = new Order(cart, 10.0);
             System.out.println("Total initial: " + order.getTotalPrice() + " €");
 
             // Appliquer une remise
             try {
-                order.applyDiscount("PROMO10");
-                System.out.println("Remise appliquée avec succès");
-            } catch (InvalidDiscountCodeException e) {
+                order.setDiscount(15.0); // 15% de remise
+                System.out.println("Remise de 15% appliquée avec succès");
+            } catch (IllegalArgumentException e) {
                 System.out.println("Erreur lors de l'application de la remise: " + e.getMessage());
             }
 

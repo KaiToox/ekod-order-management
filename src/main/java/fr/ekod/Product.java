@@ -1,14 +1,16 @@
 package fr.ekod;
 
+import fr.ekod.exceptions.OutOfStockException;
+
 public class Product {
     private String name;
     private double price;
-    private int stockQuantity;
+    private int stock;
 
-    public Product(String name, double price, int stockQuantity) {
+    public Product(String name, double price, int stock) {
         this.name = name;
         this.price = price;
-        this.stockQuantity = stockQuantity;
+        this.stock = stock;
     }
 
     public String getName() {
@@ -16,21 +18,21 @@ public class Product {
     }
 
     public double getPrice() {
-        price = price * 1.01;
         return price;
     }
 
-    public int getStockQuantity() {
-        return stockQuantity;
+    public int getStock() {
+        return stock;
     }
 
-    public void decrementStock() {
-        if (stockQuantity > 0) {
-            stockQuantity--;
+    public void decreaseStock() throws OutOfStockException {
+        if (stock <= 0) {
+            throw new OutOfStockException("Le produit " + name + " est en rupture de stock");
         }
+        stock--;
     }
 
-    public void incrementStock() {
-        stockQuantity++;
+    public void increaseStock() {
+        stock++;
     }
 }
